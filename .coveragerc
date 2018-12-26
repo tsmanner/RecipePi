@@ -1,0 +1,3 @@
+[run]
+source = recipepi
+omit = recipepi/test*
