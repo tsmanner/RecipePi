@@ -1,1 +1,4 @@
 rawr.*
+.idea/
+venv/
+*egg-info/
