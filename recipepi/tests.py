@@ -3,6 +3,7 @@ import unittest
 from pyramid import testing
 
 
+@unittest.skip("Boilerplate Pyramid Test")
 class ViewTests(unittest.TestCase):
     def setUp(self):
         self.config = testing.setUp()
@@ -17,6 +18,7 @@ class ViewTests(unittest.TestCase):
         self.assertEqual(info['project'], 'RecipePi')
 
 
+@unittest.skip("Boilerplate Pyramid Test")
 class FunctionalTests(unittest.TestCase):
     def setUp(self):
         from recipepi import main

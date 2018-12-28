@@ -63,10 +63,23 @@ class Node:
     def html(self):
         raise NotImplementedError()
 
-    def depth(self):
-        if self.outgoing:
-            return max([item.head.depth() for item in self.outgoing]) + 1
+    def depth(self, direction: str = "down"):
+        if direction.lower() == "down" and self.outgoing:
+            return max([item.depth(direction) for item in self.outgoing]) + 1
+        elif direction.lower() == "up" and self.incoming:
+            return max([item.depth(direction) for item in self.incoming]) + 1
         return 1
+
+    def traverse(self, direction="down"):
+        yield self
+        if direction == "down":
+            for node in self.outgoing:
+                for item in node.traverse(direction):
+                    yield item
+        if direction == "up":
+            for node in self.incoming:
+                for item in node.traverse(direction):
+                    yield item
 
     def __lt__(self, other):
         return self.id < other.id
