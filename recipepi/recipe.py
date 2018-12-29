@@ -116,8 +116,8 @@ def render_recipe_html(recipe: Recipe):
         set_cell_border(table, cell)
     for r, row in enumerate(table.rows):
         for c, cell in enumerate(row.cells):
-            if not hasattr(cell, "row"):
-                print(r, c, cell.content)
+            # if not hasattr(cell, "row"):
+            #     print(r, c, cell.content)
             if isinstance(cell.content, Amount):
                 cell.attributes["width"] = 75
                 cell.attributes["style"] = "padding: 3;"
@@ -130,9 +130,9 @@ def render_recipe_html(recipe: Recipe):
     # Do some formatting
     table.attributes["style"] = "border-spacing: 0;"
     # Render the HTML
-    with open("rawr.html", "w") as f:
-        f.write(table.render())
-    print(table.render())
+    # with open("rawr.html", "w") as f:
+    #     f.write(table.render())
+    return table.render()
 
 
 def get_column_for_node(node):

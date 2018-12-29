@@ -1,4 +1,12 @@
-rawr.*
+# Editors
+.vscode/
 .idea/
+
+# Python
 venv/
 *egg-info/
+*/__pychache__/
+*.pyc
+
+# Local test files
+rawr.*

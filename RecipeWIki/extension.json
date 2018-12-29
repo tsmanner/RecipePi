@@ -1,0 +1,12 @@
+{
+    "name": "RecipeWiki",
+    "version": "0.0.0",
+    "author": [
+        "Tom Manner"
+    ],
+    "url": "https://github.com/tsmanner/RecipePi",
+    "descriptionmsg": "An extension for easily creating recipe wiki pages.",
+    "license-name": "MIT",
+    "type": "other",
+    "manifest_version": 1
+}
