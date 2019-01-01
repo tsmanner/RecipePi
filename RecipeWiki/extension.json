@@ -9,10 +9,23 @@
     "license-name": "MIT",
     "type": "other",
     "AutoloadClasses": {
-        "RecipeWiki": "RecipeWiki_body.php"
+        "RecipeWiki": "RecipeWiki_body.php",
+        "Permission": "includes/Permission.php",
+        "UserPermissions": "includes/UserPermissions.php",
+        "SpecialRecipeLicenses": "specials/SpecialRecipeLicenses_body.php"
     },
     "Hooks": {
-        "ParserFirstCallInit": "RecipeWiki::init"
+        "ParserFirstCallInit": "RecipeWiki::onParserFirstCallInit",
+        "LoadExtensionSchemaUpdates": "RecipeWiki::onLoadExtensionSchemaUpdates",
+        "userCan": "RecipeWiki::onuserCan"
+    },
+    "SpecialPages": {
+        "RecipeLicenses": "SpecialRecipeLicenses"
+    },
+    "MessagesDirs": {
+        "RecipeWiki": [
+            "i18n"
+        ]
     },
     "manifest_version": 1
 }

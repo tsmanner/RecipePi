@@ -1,53 +1,33 @@
 from pyramid.view import view_config
 from pyramid.response import Response
-from recipepi.recipe import Recipe, NodeGroup, render_recipe_html
+from recipepi.recipe import Recipe, NodeGroup, parse_recipe
+
+
+AUTHORIZED_USERS = {
+    'Tsmanner',
+}
 
 
 @view_config(route_name='recipe')
 def recipe(request):
-    r = Recipe("Tom's Chili")
-    meats = NodeGroup()
-    meats += r.ingredient("Ground Beef", "1/2 Lb")
-    meats += r.ingredient("Ground Pork", "1/4 Lb")
-    meats += r.ingredient("Ground Veal", "1/4 Lb")
-    meats += r.ingredient("Water", "1/2 Cup")
+    for key in request.POST:
+        print('    {}: {}'.format(key, request.POST.getall(key)))
+    recipe_html = ''
+    license_html = ''
+    if 'body' in request.POST:
+        recipe = parse_recipe(request.POST['body'])
+        recipe_html += recipe.render_html()
+    if 'license' in request.POST:
+        license_name = request.POST['license']
+        if license_name.upper() == 'BY-NC-SA':
+            license_html = '''<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.'''
 
-    ptoo = NodeGroup()
-    ptoo += r.ingredient("Plum Tomato", "2")
-    ptoo += r.ingredient("Olive Oil", "1/4 Cup")
+    page_html = '''\
+{table}
 
-    veggies = NodeGroup()
-    veggies += r.ingredient("Red Bell Peper", "1")
-    veggies += r.ingredient("Orange Bell Pepper", "1")
-    veggies += r.ingredient("Mild Pepper", "1")
-    veggies += r.ingredient("Yellow Onion", "2")
-    veggies += r.ingredient("Garlic", "1/2 Head")
-
-    cans = NodeGroup()
-    cans += r.ingredient("Black Beans", "1 Can")
-    cans += r.ingredient("Kidney Beans", "1 Can")
-    cans += r.ingredient("Sweet Corn", "1 Can")
-
-    seasonings = NodeGroup()
-    seasonings += r.ingredient("Chili Powder", "3 Tbsp")
-    seasonings += r.ingredient("Basil Powder", "3 Tbsp")
-    seasonings += r.ingredient("Paprika", "1 Tsp")
-    seasonings += r.ingredient("Cayenne Powder", "1 Tsp")
-    seasonings += r.ingredient("Salt", "To Taste")
-
-    meat_mix = r.step("Mix in pot over medium heat and brown", meats)
-    puree = r.step("Puree", ptoo)
-    dice = r.step("Dice", veggies)
-    veggie_mix = r.step("Combine and simmer for 30 minutes or until vegetables soften", meat_mix, puree, dice)
-    drain = r.step("Open, draining most of the fluid", cans)
-    mix = r.step(
-        "Mix in pot and simmer for at least another 30 minutes.  Longer is typically better",
-        seasonings,
-        veggie_mix,
-        drain,
-    )
-
+<footer>{license}</footer>
+'''.format(table=recipe_html, license=license_html)
     response = request.response
-    response.body = bytes(render_recipe_html(r), "utf-8")
+    response.body = bytes(page_html, request.url_encoding)
     response.headers["Access-Control-Allow-Origin"] = "*"
     return response

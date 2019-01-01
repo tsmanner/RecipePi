@@ -1,0 +1,10 @@
+{
+  "@metadata": {
+      "authors": [
+          "Tsmanner"
+      ]
+  },
+  "recipelicenses": "Recipe Licenses",
+"recipelicenses-desc": "Adds the RecipeWiki licensing functionality.",
+"recipelicenses-summary": "Use this special page to set licenses for recipes you administer."
+}

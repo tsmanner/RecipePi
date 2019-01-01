@@ -132,8 +132,9 @@ class HTMLCell(HTMLTag):
             "right": False,
             "size": "1px",
             "type": "solid",
-            "color": "black",
+            "color": "#a2a9b1",
         }
+        self.attributes["style"] = "padding: 0.2em 0.4em; margin: 0;"
 
     def open(self):
         # Capture the user style string
