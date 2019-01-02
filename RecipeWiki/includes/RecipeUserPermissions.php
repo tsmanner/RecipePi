@@ -1,6 +1,6 @@
 <?php
 
-class UserPermissions {
+class RecipeUserPermissions {
   public $mUser = NULL;
   public $mPermissions;
 
@@ -8,7 +8,7 @@ class UserPermissions {
     $dbr = wfGetDB(DB_REPLICA);
     // Initialize mPermissions with all the permission IDs we know about
     $this->mPermissions = array();
-    foreach (Permission::getAllFromDb() as $perm) {
+    foreach (RecipePermission::getAllFromDb() as $perm) {
       $this->mPermissions[$perm->mId] = array();
     }
 
@@ -44,7 +44,7 @@ class UserPermissions {
   }
 
   public static function newFromUserId($user_id) {
-    return new UserPermissions(User::fromId($user_id));
+    return new RecipeUserPermissions(User::fromId($user_id));
   }
 
   public static function addUserPermission($article_id, $user_id, $permission_id) {
@@ -67,6 +67,31 @@ class UserPermissions {
           'article_id'    => $article_id,
           'user_id'       => $user_id,
           'permission_id' => $permission_id
+        )
+      );
+    }
+  }
+
+  public static function removeUserPermission($article_id, $user_id, $permission_id) {
+    // If there's no matching entry yet, insert this set of permissions
+    $dbm = wfGetDB(DB_MASTER);
+    if (
+      $dbm->select(
+        'rw_article_user_permissions',
+        array('aup_id'),
+        array(
+          'article_id='    . $article_id,
+          'user_id='       . $user_id,
+          'permission_id=' . $permission_id
+        )
+      )->numRows() != 0
+    ) {
+      $dbm->delete(
+        'rw_article_user_permissions',
+        array(
+          'article_id='    . $article_id,
+          'user_id='       . $user_id,
+          'permission_id=' . $permission_id
         )
       );
     }

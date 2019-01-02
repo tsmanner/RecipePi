@@ -1,6 +1,6 @@
 <?php
 
-class Permission {
+class RecipePermission {
   public $mId;
   public $mName;
 
@@ -14,7 +14,7 @@ class Permission {
     $dbr = wfGetDB(DB_REPLICA);
     $perms = $dbr->select('rw_permissions', array('permission_id', 'permission_name'));
     foreach ($perms as $perm) {
-      $permissions[] = new Permission($perm->permission_id, $perm->permission_name);
+      $permissions[] = new RecipePermission($perm->permission_id, $perm->permission_name);
     }
     return $permissions;
   }
@@ -25,10 +25,10 @@ class Permission {
       $perms = $dbr->select('rw_permissions', array('permission_id', 'permission_name'), 'permission_id=' . $id);
       if ($perms->numRows() > 0) {
         $perm = $perms->fetchObject();
-        return new Permission($perm->permission_id, $perm->permission_name);
+        return new RecipePermission($perm->permission_id, $perm->permission_name);
       }
     }
-    return new Permission(0, "UNINITIALIZED");
+    return NULL;
   }
 
 }

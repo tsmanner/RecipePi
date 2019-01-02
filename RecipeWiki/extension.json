@@ -9,9 +9,11 @@
     "license-name": "MIT",
     "type": "other",
     "AutoloadClasses": {
+        "RecipeLicense": "includes/RecipeLicense.php",
+        "RecipePermission": "includes/RecipePermission.php",
+        "RecipeUserPermissions": "includes/RecipeUserPermissions.php",
+        "RecipeDatabaseInitializer": "includes/RecipeDatabaseInitializer.php",
         "RecipeWiki": "RecipeWiki_body.php",
-        "Permission": "includes/Permission.php",
-        "UserPermissions": "includes/UserPermissions.php",
         "SpecialRecipeLicenses": "specials/SpecialRecipeLicenses_body.php"
     },
     "Hooks": {
@@ -27,5 +29,14 @@
             "i18n"
         ]
     },
-    "manifest_version": 1
+    "config":{
+        "RecipeWikiDefaultLicense": {
+            "value": "CC_BY_NC_SA_4_0",
+            "description": "HTML of the default license to append to a <recipe> tag"
+        }
+    },
+    "ConfigRegistry": {
+        "recipewiki": "GlobalVarConfig::newInstance"
+    },
+    "manifest_version": 2
 }
