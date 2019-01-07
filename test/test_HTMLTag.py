@@ -1,7 +1,7 @@
 """ Unit Tests for recipepi.htmlrender.HTMLTag
 """
 import unittest
-from recipepi.renderhtml import HTMLTag
+from recipepi.renderers.html import HTMLTag
 
 
 class TestHTMLTag(unittest.TestCase):

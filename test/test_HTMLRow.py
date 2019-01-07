@@ -1,7 +1,7 @@
 """ Unit Tests for recipepi.htmlrender.HTMLRow
 """
 import unittest
-from recipepi.renderhtml import HTMLRow, HTMLCell
+from recipepi.renderers.html import HTMLRow, HTMLDataCell
 
 
 class TestHTMLRow(unittest.TestCase):
@@ -32,7 +32,7 @@ class TestHTMLRow(unittest.TestCase):
     def test___len__(self):
         row = HTMLRow()
         self.assertEqual(len(row), 0)
-        row.cells.append(HTMLCell())
+        row.cells.append(HTMLDataCell())
         self.assertEqual(len(row), 1)
 
     def test_append(self):
@@ -47,7 +47,7 @@ class TestHTMLRow(unittest.TestCase):
             self.assertEqual(row.body(), '')
         with self.subTest("Non-Empty"):
             row = HTMLRow(["test"])
-            self.assertEqual(row.body(), '<td>test</td>')
+            self.assertEqual(row.body(), '<td style="padding: 0.2em 0.4em; margin: 0;">test</td>')
 
     def test_render(self):
         with self.subTest("With Attributes"):

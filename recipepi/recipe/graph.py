@@ -31,7 +31,9 @@ class Graph:
             '    bgcolor=black',
         ]
         for node in sorted(self.nodes):
-            lines.append('    ' + node.graphviz())
+            node_graphviz = node.graphviz()
+            if node_graphviz:
+                lines.append('    ' + node_graphviz)
         edges = set()
         for tail in self.nodes:
             for head in tail.outgoing:
@@ -40,9 +42,6 @@ class Graph:
             lines.append('    {} -> {} [color=gray fontcolor=gray]'.format(*edge))
         lines.append('}')
         return linesep.join(lines)
-
-    def html(self):
-        pass
 
 
 class Node:
@@ -54,13 +53,17 @@ class Node:
         self.outgoing = set()
         self.graph.nodes.add(self)
 
+    def __del__(self):
+        for inc in self.incoming:
+            inc.outgoing.remove(self)
+        for out in self.outgoing:
+            out.incoming.remove(self)
+        self.graph.nodes.remove(self)
+
     def __repr__(self):
         return "Node({})".format(self.id)
 
     def graphviz(self):
-        raise NotImplementedError()
-
-    def html(self):
         raise NotImplementedError()
 
     def depth(self, direction: str = "down"):

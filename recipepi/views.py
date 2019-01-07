@@ -1,6 +1,7 @@
 from pyramid.view import view_config
-from pyramid.response import Response
-from recipepi.recipe import Recipe, NodeGroup, parse_recipe
+from recipepi.renderers.html import render_html
+from recipepi.recipe.recipe import Recipe
+from recipepi.parsers.parser import parse_recipe
 
 
 AUTHORIZED_USERS = {
@@ -9,14 +10,17 @@ AUTHORIZED_USERS = {
 
 
 @view_config(route_name='recipe')
-def recipe(request):
+def get_recipe(request):
     for key in request.POST:
         print('    {}: {}'.format(key, request.POST.getall(key)))
     recipe_html = ''
     license_html = ''
     if 'body' in request.POST:
         recipe = parse_recipe(request.POST['body'])
-        recipe_html += recipe.render_html()
+        if isinstance(recipe, Recipe):
+            recipe_html += render_html(recipe)
+        else:
+            recipe_html = '<span style="color: red;"><b>{}</b></span>'.format(recipe)
 
     page_html = '''\
 {table}

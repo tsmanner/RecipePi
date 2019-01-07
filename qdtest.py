@@ -1,46 +1,61 @@
-from recipepi.recipe import Recipe, NodeGroup, render_recipe_html
+import time
+from recipepi.parsers.parser import parse_recipe
+from recipepi.recipe.recipe import Recipe
+from recipepi.renderers.html import HTMLDataCell, HTMLTable, render_html
+
+table = HTMLTable()
+table.attributes["style"] = "border-spacing: 0;"
+
+table[0][0] = HTMLDataCell("foo")
+# table[0][1] = HTMLCell("bar")
+bar = HTMLDataCell("bar")
+table[2][1] = HTMLDataCell("baz")
 
 
-r = Recipe("Tom's Chili")
-meats = NodeGroup()
-meats += r.ingredient("Ground Beef", "1/2 Lb")
-meats += r.ingredient("Ground Pork", "1/4 Lb")
-meats += r.ingredient("Ground Veal", "1/4 Lb")
-meats += r.ingredient("Water", "1/2 Cup")
+bar.rowspan = 2
+bar.colspan = 2
+# table[0][1].rowspan = 2
+# table[0][1].colspan = 2
 
-ptoo = NodeGroup()
-ptoo += r.ingredient("Plum Tomato", "2")
-ptoo += r.ingredient("Olive Oil", "1/4 Cup")
+table[0][1] = bar
 
-veggies = NodeGroup()
-veggies += r.ingredient("Red Bell Peper", "1")
-veggies += r.ingredient("Orange Bell Pepper", "1")
-veggies += r.ingredient("Mild Pepper", "1")
-veggies += r.ingredient("Yellow Onion", "2")
-veggies += r.ingredient("Garlic", "1/2 Head")
+print(table.dump())
+print()
+# table.render()
+# print(table.dump())
+# print()
 
-cans = NodeGroup()
-cans += r.ingredient("Black Beans", "1 Can")
-cans += r.ingredient("Kidney Beans", "1 Can")
-cans += r.ingredient("Sweet Corn", "1 Can")
+for cell in table.values():
+    cell.attributes["height"] = 25
+    cell.attributes["width"] = 50
+    cell.border["top"] = True
+    cell.border["bottom"] = True
+    # cell.border["left"] = True
+    cell.border["right"] = True
 
-seasonings = NodeGroup()
-seasonings += r.ingredient("Chili Powder", "3 Tbsp")
-seasonings += r.ingredient("Basil Powder", "3 Tbsp")
-seasonings += r.ingredient("Paprika", "1 Tsp")
-seasonings += r.ingredient("Cayenne Powder", "1 Tsp")
-seasonings += r.ingredient("Salt", "To Taste")
+table[1][0].border["right"] = False
 
-meat_mix = r.step("Mix in pot over medium heat and brown", meats)
-puree = r.step("Puree", ptoo)
-dice = r.step("Dice", veggies)
-veggie_mix = r.step("Combine and simmer for 30 minutes or until vegetables soften", meat_mix, puree, dice)
-drain = r.step("Open, draining most of the fluid", cans)
-mix = r.step(
-    "Mix in pot and simmer for at least another 30 minutes.  Longer is typically better",
-    seasonings,
-    veggie_mix,
-    drain,
-)
+table.collapse_borders()
 
-render_recipe_html(r)
+recipe = parse_recipe('')
+with open('rawr.html', 'w') as htmlfile:
+    htmlfile.write(table.render())
+    if isinstance(recipe, Recipe):
+        htmlfile.write(render_html(recipe))
+
+time.sleep(1)
+
+table1 = HTMLTable()
+table1[1][1] = HTMLDataCell("rawr")
+
+print()
+print(table1.dump())
+print()
+print(table.dump())
+combined = table.insert_table(table.Coordinate(0, 0), table1, 'right')
+
+print(combined.dump())
+print()
+print("table   ", id(table))
+print("table1  ", id(table1))
+print("combined", id(combined))
